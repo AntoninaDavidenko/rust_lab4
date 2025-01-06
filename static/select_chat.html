@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Select a Chat</h2>
+                <div id="user-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const BACKEND_URL = "http://localhost:8080";
+
+        async function loadUsers() {
+            const localId = localStorage.getItem("localId");
+            if (!localId) {
+                alert("User is not logged in!");
+                window.location.href = "index.html";
+                return;
+            }
+
+            const response = await fetch(`${BACKEND_URL}/users?localId=${encodeURIComponent(localId)}`);
+            const data = await response.json();
+
+            const userList = document.getElementById("user-list");
+            userList.innerHTML = "";
+
+            if (data.users && data.users.length > 0) {
+                data.users.forEach(user => {
+                    const div = document.createElement("div");
+                    div.className = "card mb-2";
+                    div.innerHTML = `
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">${user}</h5>
+                            <button class="btn btn-primary" onclick="window.location.href='chat.html?user=${user.localId}'">
+                                Chat
+                            </button>
+                        </div>
+                    `;
+                    userList.appendChild(div);
+                });
+            } else {
+                userList.innerHTML = '<div class="alert alert-info">No users found.</div>';
+            }
+        }
+
+        window.onload = loadUsers;
+    </script>
+</body>
+</html>
