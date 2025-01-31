@@ -2,7 +2,7 @@ use reqwest::Client;
 use serde_json::json;
 
 pub fn get_firebase_api_key() -> &'static str {
-    "AIzaSyBnJiB6JF_meFCxhnfnxH-aqIELZ66SQak" 
+    
 }
 
 pub async fn register_user(email: &str, password: &str, nickname: &str) -> Result<(String, String), Box<dyn std::error::Error>> {
@@ -69,7 +69,7 @@ pub async fn save_user_to_firestore(
     let api_key = get_firebase_api_key();
     let client = Client::new();
     let database_url = format!(
-        "https://firestore.googleapis.com/v1/projects/test-project-keivy/databases/(default)/documents/users/{}?key={}",
+        "https://firestore.googleapis.com/v1/projects/{firebase name}/databases/(default)/documents/users/{}?key={}",
         local_id, api_key
     );
 
@@ -93,7 +93,7 @@ pub async fn get_users_from_firestore() -> Result<Vec<(String, String)>, Box<dyn
     let api_key = get_firebase_api_key();
     let client = Client::new();
     let database_url = format!(
-        "https://firestore.googleapis.com/v1/projects/test-project-keivy/databases/(default)/documents/users?key={}",
+        "https://firestore.googleapis.com/v1/projects/{firebase name}/databases/(default)/documents/users?key={}",
         api_key
     );
 
